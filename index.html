@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Projekte · Bergliacht</title>
+<style>
+/* ==========================================================
+   Tokens (aus dem Bergliacht-Webshop übernommen)
+========================================================== */
+
+@font-face { font-family: "Satoshi"; src: url("assets/fonts/Satoshi-Regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("assets/fonts/Satoshi-Medium.woff") format("woff"); font-weight: 500 600; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("assets/fonts/Satoshi-Bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+
+:root {
+    --color-primary: #6A4B3B;
+    --color-primary-light: #856555;
+    --color-primary-dark: #563B2F;
+    --color-accent: #5C7257;
+    --color-background: #F5F1EA;
+    --color-surface: #E8E1D7;
+    --color-surface-secondary: #EEE8DF;
+    --color-surface-tertiary: #DDD5CA;
+    --color-text-primary: #3B342D;
+    --color-text-secondary: #6E655C;
+    --color-text-muted: #8A8076;
+    --color-text-inverse: #F5F1EA;
+    --color-border: #C9BFB2;
+    --color-border-strong: #AFA397;
+    --color-warning: #C39232;
+    --color-danger: #B64D4D;
+    --color-info: #50739A;
+
+    --radius-xs: .25rem; --radius-sm: .5rem; --radius-md: .75rem; --radius-lg: 1rem; --radius-xl: 1.5rem; --radius-full: 9999px;
+
+    --shadow-xs: 0 1px 2px rgba(59, 52, 45, .04);
+    --shadow-sm: 0 2px 6px rgba(59, 52, 45, .06);
+    --shadow-md: 0 8px 20px rgba(59, 52, 45, .08);
+    --shadow-lg: 0 16px 40px rgba(59, 52, 45, .10);
+    --shadow-xl: 0 24px 60px rgba(59, 52, 45, .14);
+
+    --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
+    --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
+
+    --transition-fast: .15s ease; --transition-base: .25s ease; --transition-slow: .4s ease;
+
+    --font-family-base: "Satoshi", system-ui, sans-serif;
+    --font-size-xs: .75rem; --font-size-sm: .875rem; --font-size-base: 1rem; --font-size-md: 1.125rem;
+    --font-size-lg: 1.25rem; --font-size-xl: 1.5rem; --font-size-2xl: 2rem; --font-size-3xl: 2.5rem; --font-size-4xl: 3rem; --font-size-5xl: 4rem;
+
+    --container: 1280px;
+    --overlay: rgba(28, 23, 19, .68);
+
+    /* Originalbild für große Bildschirme, verkleinerte Fassung fürs Handy */
+    --hero-image: url("assets/images/hero.jpg");
+}
+
+/* ==========================================================
+   Base
+========================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; }
+a { color: inherit; text-decoration: none; }
+svg.icon { width: 1.25rem; height: 1.25rem; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+::selection { background: var(--color-primary); color: var(--color-text-inverse); }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-xs); }
+
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--space-8); }
+.label {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+[hidden] { display: none !important; }
+
+/* ==========================================================
+   Buttons
+========================================================== */
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    height: 3.25rem; padding: 0 var(--space-6);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm); font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    transition: background var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+}
+.btn:active { transform: translateY(1px); }
+.btn--light { background: var(--color-background); color: var(--color-text-primary); }
+.btn--light:hover { background: #fff; box-shadow: var(--shadow-md); }
+.icon-btn {
+    display: inline-grid; place-items: center;
+    width: 2.5rem; height: 2.5rem; border-radius: var(--radius-full);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+/* ==========================================================
+   Passwortseite
+========================================================== */
+
+.lock {
+    position: fixed; inset: 0; z-index: 50;
+    display: grid; place-items: center;
+    padding: var(--space-6);
+    color: var(--color-text-inverse);
+    background:
+        radial-gradient(ellipse 38rem 30rem at 50% 45%, rgba(28, 23, 19, .55), rgba(28, 23, 19, 0) 70%),
+        linear-gradient(0deg, rgba(28, 23, 19, .6), rgba(28, 23, 19, .3) 60%, rgba(28, 23, 19, .5)),
+        var(--hero-image) center 35% / cover no-repeat,
+        #2c2620;
+    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+}
+.lock.is-leaving { opacity: 0; visibility: hidden; }
+.lock__inner { width: 100%; max-width: 26rem; text-align: center; }
+.lock__logo { width: 4.5rem; height: 4.5rem; margin: 0 auto var(--space-8); color: var(--color-text-inverse); }
+.lock__label { opacity: .85; margin-bottom: var(--space-4); }
+.lock__title {
+    font-size: clamp(2.5rem, 7vw, var(--font-size-5xl));
+    font-weight: 400; line-height: 1.05; letter-spacing: -.035em;
+    margin-bottom: var(--space-4);
+}
+.lock__text { opacity: .85; margin-bottom: var(--space-10); }
+.lock__form { display: flex; flex-direction: column; gap: var(--space-3); }
+.lock__field { position: relative; }
+.lock__field svg { position: absolute; left: var(--space-4); top: 50%; translate: 0 -50%; opacity: .7; }
+.lock__input {
+    width: 100%; height: 3.25rem;
+    padding: 0 var(--space-4) 0 3rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(245, 241, 234, .35);
+    background: rgba(245, 241, 234, .12);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    color: var(--color-text-inverse);
+    transition: border-color var(--transition-base), background var(--transition-base);
+}
+.lock__input::placeholder { color: rgba(245, 241, 234, .65); }
+.lock__input:focus { outline: none; border-color: rgba(245, 241, 234, .8); background: rgba(245, 241, 234, .18); }
+.lock__form.is-error { animation: shake .4s ease; }
+.lock__form.is-error .lock__input { border-color: #e09a9a; }
+.lock__hint { margin-top: var(--space-6); font-size: var(--font-size-xs); opacity: .6; }
+.lock__remember {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: var(--font-size-sm); opacity: .85; cursor: pointer; user-select: none;
+}
+.lock__remember input {
+    appearance: none; -webkit-appearance: none;
+    width: 1.1rem; height: 1.1rem; margin: 0;
+    border-radius: var(--radius-xs);
+    border: 1px solid rgba(245, 241, 234, .55);
+    background: rgba(245, 241, 234, .1);
+    display: grid; place-items: center; cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+.lock__remember input::after {
+    content: ""; width: .3rem; height: .55rem; margin-top: -2px;
+    border: solid var(--color-text-primary); border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0); transition: transform var(--transition-fast);
+}
+.lock__remember input:checked { background: var(--color-background); border-color: var(--color-background); }
+.lock__remember input:checked::after { transform: rotate(45deg) scale(1); }
+.lock__error { min-height: 1.4em; margin-top: var(--space-4); font-size: var(--font-size-sm); color: #f0b4b4; }
+.btn[disabled] { opacity: .7; cursor: progress; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+
+/* ==========================================================
+   Header + Hero
+========================================================== */
+
+.header {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+    color: var(--color-text-inverse);
+}
+.header__inner {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    height: 6rem;
+}
+.header__domain { font-size: var(--font-size-sm); opacity: .85; display: flex; align-items: center; gap: var(--space-2); }
+.header__domain .dot { width: .5rem; height: .5rem; border-radius: 50%; background: #9fb894; box-shadow: 0 0 0 3px rgba(159, 184, 148, .25); }
+.header__logo { width: 3.25rem; height: 3.25rem; color: var(--color-text-inverse); }
+.header__actions { justify-self: end; display: flex; gap: var(--space-1); }
+.header__actions .icon-btn:hover { background: rgba(245, 241, 234, .14); }
+
+.hero {
+    position: relative;
+    min-height: min(64vh, 40rem);
+    display: flex; align-items: flex-end;
+    padding: 9rem 0 var(--space-16);
+    color: var(--color-text-inverse);
+    background:
+        linear-gradient(90deg, rgba(28, 23, 19, .68) 0%, rgba(28, 23, 19, .38) 45%, rgba(28, 23, 19, .08) 75%),
+        linear-gradient(0deg, rgba(28, 23, 19, .28), rgba(0, 0, 0, 0) 42%),
+        var(--hero-image) center 35% / cover no-repeat,
+        #2c2620;
+}
+.hero__label { margin-bottom: var(--space-5); opacity: .9; }
+.hero__title {
+    font-size: clamp(2.75rem, 7vw, 4.5rem);
+    font-weight: 400; line-height: 1.02; letter-spacing: -.035em;
+    margin-bottom: var(--space-5);
+}
+.hero__text { max-width: 30rem; opacity: .9; margin-bottom: var(--space-10); }
+.hero__stats { display: flex; flex-wrap: wrap; gap: var(--space-10); }
+.stat__value { font-size: var(--font-size-2xl); line-height: 1; letter-spacing: -.02em; }
+.stat__label { margin-top: var(--space-2); opacity: .75; }
+
+/* ==========================================================
+   Explorer
+========================================================== */
+
+.explorer { padding: var(--space-16) 0 var(--space-24); }
+.explorer__layout { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: var(--space-12); align-items: start; }
+.explorer__layout > * { min-width: 0; }
+
+/* Seitenleiste */
+
+.sidebar { position: sticky; top: var(--space-8); }
+.sidebar__title { color: var(--color-text-muted); margin-bottom: var(--space-4); padding: 0 var(--space-3); }
+.folders { display: flex; flex-direction: column; gap: 2px; list-style: none; }
+.folder {
+    width: 100%;
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    text-align: left;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+.folder:hover { background: var(--color-surface-secondary); color: var(--color-text-primary); }
+.folder.is-active { background: var(--color-surface); color: var(--color-text-primary); }
+.folder.is-active .folder__icon { color: var(--color-primary); }
+.folder__name { flex: 1; }
+.folder__count {
+    min-width: 1.5rem; padding: 0 var(--space-2);
+    font-size: var(--font-size-xs); text-align: center;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-secondary); color: var(--color-text-muted);
+}
+.folder.is-active .folder__count { background: var(--color-background); }
+.sidebar__note {
+    margin-top: var(--space-8); padding: var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-sm); color: var(--color-text-secondary);
+}
+.sidebar__note strong { display: block; font-weight: 500; color: var(--color-text-primary); margin-bottom: var(--space-1); }
+
+/* Werkzeugleiste */
+
+.toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+    padding-bottom: var(--space-5);
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+}
+.crumbs { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-sm); color: var(--color-text-muted); min-width: 0; }
+.crumbs svg { width: 1rem; height: 1rem; }
+.crumbs__current { color: var(--color-text-primary); font-weight: 500; white-space: nowrap; }
+.toolbar__right { display: flex; align-items: center; gap: var(--space-3); }
+.search { position: relative; }
+.search svg { position: absolute; left: var(--space-3); top: 50%; translate: 0 -50%; width: 1.1rem; height: 1.1rem; color: var(--color-text-muted); pointer-events: none; }
+.search input {
+    width: 15rem; height: 2.5rem;
+    padding: 0 var(--space-3) 0 2.4rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-secondary);
+    font-size: var(--font-size-sm);
+    transition: border-color var(--transition-base), background var(--transition-base), width var(--transition-base);
+}
+.search input::placeholder { color: var(--color-text-muted); }
+.search input:focus { outline: none; border-color: var(--color-border-strong); background: #fff; }
+.segmented { display: flex; padding: 3px; border-radius: var(--radius-full); background: var(--color-surface); }
+.segmented button {
+    display: grid; place-items: center; width: 2.25rem; height: 2.125rem;
+    border-radius: var(--radius-full); color: var(--color-text-muted);
+    transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.segmented button svg { width: 1.1rem; height: 1.1rem; }
+.segmented button.is-active { background: var(--color-background); color: var(--color-text-primary); box-shadow: var(--shadow-sm); }
+
+.summary { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-6); }
+.summary__title { font-size: var(--font-size-2xl); font-weight: 400; letter-spacing: -.02em; }
+.summary__count { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+
+/* Kacheln */
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: var(--space-6); }
+.card {
+    display: flex; flex-direction: column;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-secondary);
+    overflow: hidden;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+    animation: rise .5s ease both;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); background: #fff; }
+.card__thumb { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; }
+.card__thumb::before {
+    content: ""; position: absolute; inset: -10%;
+    background: var(--contours) center / 120% no-repeat;
+    opacity: .4;
+    transition: transform var(--transition-slow);
+}
+.card:hover .card__thumb::before { transform: scale(1.06); }
+.card__glyph {
+    position: relative;
+    width: 4.5rem; height: 4.5rem;
+    display: grid; place-items: center;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, .55);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-base);
+}
+.card:hover .card__glyph { transform: translateY(-3px) rotate(-3deg); }
+.card__glyph svg { width: 2rem; height: 2rem; stroke-width: 1.3; }
+.card__tag {
+    position: absolute; top: var(--space-4); left: var(--space-4);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: rgba(245, 241, 234, .85);
+    font-size: var(--font-size-xs); font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--color-text-secondary);
+}
+.card__status {
+    position: absolute; top: var(--space-4); right: var(--space-4);
+    display: flex; align-items: center; gap: .4rem;
+    font-size: var(--font-size-xs); color: var(--color-text-secondary);
+}
+.card__status::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--color-warning); }
+.card__body { padding: var(--space-5) var(--space-5) var(--space-6); display: flex; flex-direction: column; gap: var(--space-2); flex: 1; }
+.card__title { font-size: var(--font-size-lg); font-weight: 500; letter-spacing: -.01em; line-height: 1.3; }
+.card__desc { font-size: var(--font-size-sm); color: var(--color-text-secondary); flex: 1; }
+.card__meta {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: var(--space-3); padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--font-size-xs); color: var(--color-text-muted);
+}
+.card__open { display: flex; align-items: center; gap: var(--space-1); color: var(--color-text-primary); font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
+.card__open svg { width: 1rem; height: 1rem; transition: transform var(--transition-base); }
+.card:hover .card__open svg { transform: translateX(3px); }
+
+/* Kategorie-Farben: dezente Tönungen aus der Bergliacht-Palette */
+.c-web  { --tint: #E2D7CC; --ink: var(--color-primary); }
+.c-3d   { --tint: #D9DED2; --ink: var(--color-accent); }
+.c-app  { --tint: #D8DDE2; --ink: var(--color-info); }
+.c-exp  { --tint: #E8DFC9; --ink: #9A7429; }
+.card__thumb { background: var(--tint); color: var(--ink); }
+
+/* Liste */
+
+.list { border-top: 1px solid var(--color-border); }
+.list__head, .row {
+    display: grid; grid-template-columns: minmax(0, 1fr) 9rem 7rem 2rem;
+    align-items: center; gap: var(--space-4);
+    padding: var(--space-4) var(--space-3);
+}
+.list__head { color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); padding-top: var(--space-3); padding-bottom: var(--space-3); }
+.row { border-bottom: 1px solid var(--color-border); border-radius: var(--radius-sm); transition: background var(--transition-fast); animation: rise .4s ease both; }
+.row:hover { background: var(--color-surface-secondary); }
+.row__name { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+.row__icon { width: 2.75rem; height: 2.75rem; flex: none; display: grid; place-items: center; border-radius: var(--radius-md); background: var(--tint); color: var(--ink); }
+.row__icon svg { width: 1.25rem; height: 1.25rem; }
+.row__title { font-weight: 500; }
+.row__desc { font-size: var(--font-size-sm); color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row__cell { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+.row__arrow { color: var(--color-text-muted); transition: transform var(--transition-base), color var(--transition-base); }
+.row:hover .row__arrow { transform: translateX(3px); color: var(--color-text-primary); }
+
+/* Leerer Zustand */
+
+.empty {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: var(--space-20) var(--space-6);
+    border: 1.5px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-secondary);
+    animation: rise .6s ease both;
+}
+.empty__art { width: 11rem; height: auto; margin-bottom: var(--space-8); color: var(--color-primary); }
+.empty__label { color: var(--color-text-muted); margin-bottom: var(--space-3); }
+.empty__title { font-size: var(--font-size-3xl); font-weight: 400; letter-spacing: -.03em; line-height: 1.1; margin-bottom: var(--space-4); }
+.empty__text { max-width: 28rem; color: var(--color-text-secondary); }
+.empty__next {
+    margin-top: var(--space-8);
+    display: inline-flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-sm); color: var(--color-text-secondary);
+}
+.empty__next .pulse { width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; background: #F1E6CF; }
+.empty__next .pulse::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--color-warning); animation: pulse 1.8s ease-in-out infinite; }
+.empty__next strong { color: var(--color-text-primary); font-weight: 500; }
+@keyframes pulse { 50% { transform: scale(1.5); opacity: .5; } }
+
+.no-results { padding: var(--space-16) 0; text-align: center; color: var(--color-text-secondary); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+
+/* Footer */
+
+.footer { border-top: 1px solid var(--color-border); padding: var(--space-10) 0; color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.footer__inner { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); }
+.footer__brand { display: flex; align-items: center; gap: var(--space-3); color: var(--color-text-secondary); }
+.footer__brand svg { width: 1.75rem; height: 1.75rem; color: var(--color-primary); }
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 960px) {
+    .explorer__layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); }
+    .sidebar { position: static; }
+    .sidebar__title, .sidebar__note { display: none; }
+    .folders { flex-direction: row; overflow-x: auto; gap: var(--space-2); margin: 0 calc(var(--space-8) * -1); padding: 0 var(--space-8); scrollbar-width: none; }
+    .folders::-webkit-scrollbar { display: none; }
+    .folder { width: auto; white-space: nowrap; border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: var(--space-2) var(--space-4); }
+    .folder.is-active { border-color: var(--color-surface); }
+}
+@media (max-width: 640px) {
+    :root { --hero-image: url("assets/images/hero-mobil.jpg"); }
+    .container { padding: 0 var(--space-4); }
+    .folders { margin: 0 calc(var(--space-4) * -1); padding: 0 var(--space-4); }
+    .header__inner { height: 5rem; }
+    .header__domain span:last-child { display: none; }
+    .header__logo { width: 2.75rem; height: 2.75rem; }
+    .hero { padding-top: 7rem; padding-bottom: var(--space-12); }
+    .hero__stats { gap: var(--space-8); }
+    .toolbar { flex-wrap: wrap; }
+    .toolbar__right { width: 100%; }
+    .search { flex: 1; }
+    .search input { width: 100%; }
+    .list__head { display: none; }
+    .row { grid-template-columns: minmax(0, 1fr) 1.5rem; }
+    .row__cell { display: none; }
+    .empty { padding: var(--space-12) var(--space-5); }
+    .empty__title { font-size: var(--font-size-2xl); }
+    .footer__inner { flex-direction: column; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Symbole: Logo (aus dem Shop) und Icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 2000 2000">
+    <g transform="matrix(4.712502,0,0,4.712502,-1395.792421,-449.865859)">
+        <path d="M552.512,343.968C556.008,344.024 576.254,344.347 595.614,351.192C598.225,352.116 618.69,361.501 620.117,362.814C621.965,364.513 598.923,384.311 597.338,385.206C594.671,386.71 557.283,364.413 535.624,383.645C514.557,402.352 539.544,441.42 598.196,396.119C697.636,319.317 658.81,252.178 570.473,265.326C530.17,271.325 485.114,300.266 519.88,278.957C539.101,267.177 570.317,234.015 581.139,220.248C585.964,214.11 586.43,220.816 604.988,238.286C609.41,242.45 600.716,237.902 600.388,237.73C587.961,231.23 585.927,229.305 582.908,232.879C572.818,244.825 572.208,244.058 561.844,255.629C560.159,257.51 566.207,256.054 566.576,255.965C636.238,239.197 713.438,296.062 632.294,379.297C544.395,469.462 498.622,409.477 525.608,379.599C547.523,355.336 583.394,369.9 590.52,372.446C597.707,375.015 597.658,372.624 603.146,367.222C603.439,366.933 604.459,365.929 599.421,363.673C556.756,344.569 532.227,359.096 527.258,362.039C471.652,394.972 522.68,489.485 621.075,405.008C694.975,341.56 681.871,303.578 678.203,290.603C673.989,275.695 630.259,221.624 629.564,221.816C622.164,223.867 634.332,245.036 633.29,246.372C632.172,247.807 628.198,240.548 627.012,238.91C624.337,235.216 606.666,210.815 592.361,193.644C590.03,190.846 590.731,195.216 568.648,220.616C557.497,233.443 476.583,326.516 375.546,309.211C324.265,300.428 320.286,262.488 320.316,262.409C321.015,260.582 377.326,200.031 382.666,194.724C384.545,192.856 396.181,202.806 397.564,203.28C400.117,204.156 432.479,163.2 435.86,159.857C437.321,158.412 438.247,159.214 453.959,178.084C457.109,181.868 461.743,172.614 480.206,153.221C519.214,112.248 519.036,107.214 522.194,110.795C526.442,115.613 577.893,182.478 578.113,182.784C585.105,192.492 587.368,176.155 591.449,176.703C591.975,176.774 610.573,200.954 617.95,211.179C622.751,217.833 624.191,213.089 631.555,209.618C633.649,208.631 634.214,209.302 650.401,231.574C675.142,265.615 704.586,292.059 685.493,340.497C672.66,373.051 595.218,468.864 524.613,445.182C488.159,432.955 471.847,356.109 552.512,343.968ZM528.004,197.3C525.375,197.493 519.025,188.358 508.482,178.519C497.539,168.307 445.836,242.236 475.05,199.212C476.826,196.596 476.611,196.622 478.16,194.292C488.155,179.258 485.514,175.609 502.595,169.764C506.167,168.542 508.648,153.848 517.821,128.496C519.651,123.436 515.012,129.283 510.905,133.864C506.631,138.63 461.707,188.73 457.291,193.267C456.164,194.425 454.71,194.983 442.571,179.429C435.003,169.733 443.829,190.354 447.706,204.448C448.657,207.905 439.655,217.274 444.519,215.595C452.752,212.753 451.287,217.888 461.614,230.41C480.931,253.834 449.402,221.443 446.501,221.424C445.072,221.415 424.505,235.374 422.61,236.9C411.435,245.899 439.83,211.412 439.108,201.547C437.247,176.138 436.094,174.187 434.761,175.796C388.546,231.612 387.726,230.897 383.87,235.878C373.889,248.771 383.732,231.409 390.191,218.347C393.245,212.17 392.347,211.146 386.431,207.63C384.155,206.277 383.431,206.97 362.566,230.559C328.869,268.654 380.506,299.441 468.423,265.303C530.623,241.152 569.019,201.941 574.308,195.396C575.944,193.373 574.1,193.424 570.8,189.283C525.337,132.234 527.052,130.922 522.444,126.576C520.372,124.621 520.484,127.609 515.436,161.49C512.47,181.395 524.867,185.031 528.004,197.3ZM411.512,300.966C468.284,297.398 510.142,262.078 530.329,246.322C530.655,246.067 551.025,227.65 532.606,241.671C495.024,270.28 416.183,302.598 367.611,284.179C333.58,271.274 345.889,246.509 340.26,254.001C335.041,260.947 329.429,263.498 331.844,268.335C345.557,295.793 373.382,303.771 411.512,300.966Z" style="fill:currentColor;"/>
+    </g>
+    <g transform="matrix(4.712502,0,0,4.712502,-1395.792421,-449.865859)">
+        <path d="M477.946,329.538C478.102,328.741 479.14,323.433 479.682,319.526C480.759,311.764 475.985,317.17 468.56,319.682C461.982,321.907 463.304,323.653 464.026,327.599C465.881,337.749 464.556,337.856 447.171,455.466C443.851,477.927 432.727,482.663 441.5,482.578C450.223,482.494 505.637,481.958 550.544,482.246C553.593,482.265 549.168,491.738 547.421,492.171C544.507,492.893 420.545,492.429 409.512,492.388C408.212,492.383 405.591,488.232 421.406,481.305C436.073,474.88 435.918,460.794 443.619,409.518C454.973,333.923 456.204,333.537 453.586,327.464C449.995,319.134 436.798,319.161 445.576,316.734C486.109,305.525 490.486,295.792 492.616,298.434C492.902,298.789 473.111,432.677 469.763,458.522C469.354,461.678 471.672,460.326 509.5,460.365C554.646,460.412 554.594,460.318 558.515,460.359C559.24,460.366 561.248,460.796 557.22,469.329C556.536,470.778 549.278,470.407 533.5,470.395C459.416,470.339 459.327,470.571 458.668,470.159C456.708,468.933 473.759,365.096 477.946,329.538Z" style="fill:currentColor;"/>
+    </g>
+    <g transform="matrix(4.712502,0,0,4.712502,-1395.792421,-449.865859)">
+        <path d="M672.045,455.462C670.884,459.709 670.301,471.258 657.35,482.331C640.639,496.619 615.011,492.213 577.502,492.887C572.092,492.984 568.553,494.68 570.371,489.456C573.48,480.52 575.96,482.704 585.5,482.717C631.046,482.781 654.86,486.656 661.748,454.542C663.562,446.083 660.193,430.488 649.324,419.673C643.134,413.514 640.367,413.555 642.97,410.907C663.595,389.925 664.355,389.273 666.33,390.753C724.613,434.423 700.23,514.051 623.502,514.822C618.528,514.872 562.933,515.431 561.325,514.723C559.982,514.132 563.717,504.761 565.533,504.718C620.703,503.415 656.834,512.928 681.133,476.269C700.558,446.964 674.133,403.646 665.5,403.527C663.981,403.506 655.681,411.448 657.43,413.554C669.31,427.856 672.678,434.281 672.045,455.462Z" style="fill:currentColor;"/>
+    </g>
+    <g transform="matrix(4.712502,0,0,4.712502,-1395.792421,-449.865859)">
+        <path d="M406.927,511.498C407.021,506.483 406.739,506.534 407.312,505.363C408.243,503.463 530.754,504.52 541.488,504.613C544.468,504.639 541.273,514.696 537.51,514.839C535.186,514.928 419.732,514.912 409.49,514.911C406.115,514.91 407.003,511.868 406.927,511.498Z"/>
+    </g>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 16l-4-4 4-4"/><path d="M6 12h10"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r=".8"/><circle cx="4.5" cy="12" r=".8"/><circle cx="4.5" cy="18" r=".8"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h3.8l2 2.2h7.2a2 2 0 0 1 2 2v7.8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-web" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9h18"/><circle cx="6" cy="6.8" r=".5"/><circle cx="8" cy="6.8" r=".5"/><path d="M7 13.5h5M7 16h8"/></symbol>
+    <symbol id="i-3d" viewBox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z"/><path d="M12 12 20 7.5M12 12 4 7.5M12 12v9"/></symbol>
+    <symbol id="i-app" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></symbol>
+    <symbol id="i-exp" viewBox="0 0 24 24"><path d="M9.5 3.5h5M10.5 3.5v5.2L5.3 17.6A2 2 0 0 0 7 20.5h10a2 2 0 0 0 1.7-2.9l-5.2-8.9V3.5"/><path d="M7.8 14h8.4"/></symbol>
+    <symbol id="i-all" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h3.8l2 2.2h7.2a2 2 0 0 1 2 2v7.8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path d="M3.5 11h17"/></symbol>
+</svg>
+
+
+<!-- ========================= Passwortseite ========================= -->
+<section class="lock" id="lock" aria-label="Anmeldung">
+    <div class="lock__inner">
+        <svg class="lock__logo" aria-label="Bergliacht"><use href="#logo"/></svg>
+        <p class="label lock__label">Privater Bereich</p>
+        <h1 class="lock__title">Willkommen zurück.</h1>
+        <p class="lock__text">Diese Seite ist geschützt.<br>Gib dein Passwort ein, um fortzufahren.</p>
+        <form class="lock__form" id="lockForm" autocomplete="off">
+            <div class="lock__field">
+                <svg class="icon"><use href="#i-lock"/></svg>
+                <input class="lock__input" id="lockInput" type="password" placeholder="Passwort" aria-label="Passwort" autocomplete="current-password">
+            </div>
+            <button class="btn btn--light" id="lockButton" type="submit">Entsperren</button>
+            <label class="lock__remember"><input type="checkbox" id="lockRemember" checked> Auf diesem Gerät angemeldet bleiben</label>
+        </form>
+        <p class="lock__error" id="lockError" role="alert"></p>
+        <p class="lock__hint" id="lockHint" hidden>Lokale Vorschau: Jedes beliebige Passwort öffnet die Seite.</p>
+    </div>
+</section>
+
+<!-- Der Explorer wird erst nach dem Entsperren hier eingesetzt -->
+<div id="app"></div>
+
+<!-- Verschlüsselter Inhalt (inhalt.html + projekte.json). "null" = lokale Vorschau ohne Verschlüsselung. -->
+<script id="payload" type="application/json">{"v":1,"iter":600000,"salt":"H03P0Dk2GKIrcG0lkwGChA==","iv":"HamFt5xDLtJC6HI+e0LlYA==","mac":"6KjOTQ8VFtM0ztvWfhl8sKqKFC/oWM9qy8OriMVSzVI=","data":"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"}</script>
+
+<script>
+/* Kategorien = Ordner im Explorer */
+const CATEGORIES = [
+    { id: "alle", name: "Alle Projekte", icon: "i-all" },
+    { id: "web",  name: "Websites",      icon: "i-web" },
+    { id: "app",  name: "Apps",          icon: "i-app" },
+    { id: "3d",   name: "3D-Druck",      icon: "i-3d" },
+    { id: "exp",  name: "Experimente",   icon: "i-exp" }
+];
+
+const MONTHS = ["Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+const fmtDate = d => { const [y, m] = d.split("-"); return `${MONTHS[+m - 1]} ${y}`; };
+const catOf = id => CATEGORIES.find(c => c.id === id) || CATEGORIES[0];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const state = { projects: [], cat: "alle", layout: "grid", query: "" };
+const $ = s => document.querySelector(s);
+
+/* Höhenlinien-Muster für die Vorschaubilder (alpines Detail) */
+document.documentElement.style.setProperty("--contours", `url("data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' fill='none' stroke='currentColor' stroke-width='1'>` +
+    [0, 1, 2, 3, 4, 5, 6, 7].map(i => {
+        const s = 1 - i * .11;
+        return `<ellipse cx='${250 - i * 4}' cy='${150 + i * 3}' rx='${190 * s}' ry='${120 * s}' transform='rotate(${-12 + i * 2} 250 150)' stroke='black' stroke-opacity='.13'/>`;
+    }).join("") + `</svg>`
+)}")`);
+
+/* ==========================================================
+   Explorer
+========================================================== */
+
+const linkAttrs = p => p.link
+    ? `href="${esc(p.link)}"${/^https?:/.test(p.link) ? ` target="_blank" rel="noopener"` : ""}`
+    : `href="#" data-nolink`;
+
+function renderFolders() {
+    $("#folders").innerHTML = CATEGORIES.map(c => {
+        const n = c.id === "alle" ? state.projects.length : state.projects.filter(p => p.cat === c.id).length;
+        return `<li><button class="folder${state.cat === c.id ? " is-active" : ""}" data-cat="${c.id}">
+            <svg class="icon folder__icon"><use href="#${c.icon}"/></svg>
+            <span class="folder__name">${c.name}</span>
+            <span class="folder__count">${n}</span>
+        </button></li>`;
+    }).join("");
+}
+
+function renderContent() {
+    const cat = catOf(state.cat);
+    const q = state.query.trim().toLowerCase();
+    const items = state.projects
+        .filter(p => state.cat === "alle" || p.cat === state.cat)
+        .filter(p => !q || (p.title + " " + p.desc).toLowerCase().includes(q));
+
+    $("#crumb").textContent = cat.name;
+    $("#sumTitle").textContent = cat.name;
+    $("#sumCount").textContent = `${items.length} ${items.length === 1 ? "Projekt" : "Projekte"}`;
+
+    const el = $("#content");
+
+    if (!state.projects.length) {
+        el.innerHTML = `
+        <div class="empty">
+            <svg class="empty__art" viewBox="0 0 220 150" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M24 40a8 8 0 0 1 8-8h40l12 13h104a8 8 0 0 1 8 8v77a8 8 0 0 1-8 8H32a8 8 0 0 1-8-8z" fill="#F5F1EA"/>
+                <path d="M24 60h172" opacity=".35"/>
+                <path d="M48 128l34-42 18 20 24-34 44 56" stroke="#5C7257"/>
+                <path d="M114 86l10-14 9 12" stroke="#5C7257" opacity=".5"/>
+                <circle cx="160" cy="80" r="7" stroke="#C39232"/>
+                <path d="M40 18v-6M34 15h12" opacity=".4"/><path d="M196 24v-6M190 21h12" opacity=".4"/>
+            </svg>
+            <p class="label empty__label">Noch leer</p>
+            <h3 class="empty__title">Hier entsteht bald etwas.</h3>
+            <p class="empty__text">Jedes abgeschlossene Projekt bekommt in diesem Explorer seinen eigenen Platz. Mit der Zeit wächst hier dein ganz persönliches Archiv.</p>
+            <div class="empty__next"><span class="pulse"></span><span>Gerade in Arbeit: <strong>Projekte-Explorer</strong></span></div>
+        </div>`;
+        return;
+    }
+
+    if (!items.length) {
+        el.innerHTML = `<p class="no-results">Keine Projekte gefunden.</p>`;
+        return;
+    }
+
+    if (state.layout === "grid") {
+        el.innerHTML = `<div class="grid">${items.map((p, i) => {
+            const c = catOf(p.cat);
+            return `<a ${linkAttrs(p)} class="card c-${esc(p.cat)}" style="animation-delay:${i * 50}ms">
+                <div class="card__thumb">
+                    <span class="card__tag">${c.name}</span>
+                    ${p.status ? `<span class="card__status">${esc(p.status)}</span>` : ""}
+                    <span class="card__glyph"><svg class="icon"><use href="#${c.icon}"/></svg></span>
+                </div>
+                <div class="card__body">
+                    <h3 class="card__title">${esc(p.title)}</h3>
+                    <p class="card__desc">${esc(p.desc)}</p>
+                    <div class="card__meta"><span>${fmtDate(p.date)}</span><span class="card__open">Öffnen <svg class="icon"><use href="#i-arrow"/></svg></span></div>
+                </div>
+            </a>`;
+        }).join("")}</div>`;
+    } else {
+        el.innerHTML = `<div class="list">
+            <div class="list__head label"><span>Name</span><span>Kategorie</span><span>Datum</span><span></span></div>
+            ${items.map((p, i) => {
+                const c = catOf(p.cat);
+                return `<a ${linkAttrs(p)} class="row c-${esc(p.cat)}" style="animation-delay:${i * 35}ms">
+                    <span class="row__name">
+                        <span class="row__icon"><svg class="icon"><use href="#${c.icon}"/></svg></span>
+                        <span style="min-width:0"><span class="row__title">${esc(p.title)}</span><span class="row__desc" style="display:block">${esc(p.desc)}</span></span>
+                    </span>
+                    <span class="row__cell">${c.name}</span>
+                    <span class="row__cell">${fmtDate(p.date)}</span>
+                    <svg class="icon row__arrow"><use href="#i-arrow"/></svg>
+                </a>`;
+            }).join("")}
+        </div>`;
+    }
+}
+
+function renderStats() {
+    $("#statProjects").textContent = state.projects.length;
+    $("#statCats").textContent = new Set(state.projects.map(p => p.cat)).size;
+    const latest = state.projects.map(p => p.date).sort().pop();
+    $("#lastUpdate").textContent = latest ? fmtDate(latest) : "Noch keine Projekte";
+}
+
+function render() { renderFolders(); renderContent(); renderStats(); }
+
+function startExplorer({ html, projects }) {
+    $("#app").innerHTML = html;
+    state.projects = [...projects].sort((a, b) => b.date.localeCompare(a.date));
+    render();
+
+    $("#folders").addEventListener("click", e => {
+        const b = e.target.closest("[data-cat]"); if (!b) return;
+        state.cat = b.dataset.cat; render();
+    });
+    document.querySelectorAll("[data-layout]").forEach(b => b.addEventListener("click", () => {
+        state.layout = b.dataset.layout;
+        document.querySelectorAll("[data-layout]").forEach(x => x.classList.toggle("is-active", x === b));
+        renderContent();
+    }));
+    $("#search").addEventListener("input", e => { state.query = e.target.value; renderContent(); });
+    $("#searchJump").addEventListener("click", () => { $(".explorer").scrollIntoView({ behavior: "smooth" }); setTimeout(() => $("#search").focus(), 400); });
+    $("#content").addEventListener("click", e => { if (e.target.closest("[data-nolink]")) e.preventDefault(); });
+    $("#logout").addEventListener("click", () => { forgetKey(); location.reload(); });
+
+    $("#lock").classList.add("is-leaving");
+}
+
+/* ==========================================================
+   Entschlüsselung: PBKDF2-SHA256 -> AES-256-CBC + HMAC-SHA256
+   (Gegenstück zu werkzeuge/veroeffentlichen.ps1)
+========================================================== */
+
+const KEY_STORE = "bergliacht-projekte-schluessel";
+const payload = JSON.parse($("#payload").textContent);
+const fromB64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const toB64 = a => btoa(String.fromCharCode(...a));
+
+async function deriveKey(password) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: fromB64(payload.salt), iterations: payload.iter }, base, 512);
+    return new Uint8Array(bits);
+}
+
+async function decrypt(keyBytes) {
+    const encKey = await crypto.subtle.importKey("raw", keyBytes.slice(0, 32), "AES-CBC", false, ["decrypt"]);
+    const macKey = await crypto.subtle.importKey("raw", keyBytes.slice(32), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    const iv = fromB64(payload.iv), data = fromB64(payload.data);
+    const signed = new Uint8Array(iv.length + data.length);
+    signed.set(iv); signed.set(data, iv.length);
+    if (!await crypto.subtle.verify("HMAC", macKey, fromB64(payload.mac), signed)) throw new Error("Falsches Passwort");
+    const plain = await crypto.subtle.decrypt({ name: "AES-CBC", iv }, encKey, data);
+    return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function rememberKey(keyBytes) {
+    try { localStorage.setItem(KEY_STORE, JSON.stringify({ salt: payload.salt, key: toB64(keyBytes) })); } catch (e) {}
+}
+function forgetKey() {
+    try { localStorage.removeItem(KEY_STORE); } catch (e) {}
+}
+function storedKey() {
+    try {
+        const s = JSON.parse(localStorage.getItem(KEY_STORE));
+        return s && s.salt === payload.salt ? fromB64(s.key) : null;
+    } catch (e) { return null; }
+}
+
+/* Lokale Vorschau ohne Verschlüsselung: Inhalt direkt aus den Quelldateien laden */
+async function loadPlain() {
+    const [html, projects] = await Promise.all([
+        fetch("inhalt.html").then(r => r.text()),
+        fetch("projekte.json").then(r => r.json())
+    ]);
+    return { html, projects };
+}
+
+/* ==========================================================
+   Passwortseite
+========================================================== */
+
+const lockForm = $("#lockForm"), lockInput = $("#lockInput"), lockButton = $("#lockButton"), lockError = $("#lockError");
+
+function fail(message) {
+    lockError.textContent = message;
+    lockForm.classList.remove("is-error"); void lockForm.offsetWidth; lockForm.classList.add("is-error");
+    lockInput.select();
+}
+
+lockForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!lockInput.value) return fail("");
+    lockButton.disabled = true;
+    lockButton.textContent = "Wird entsperrt …";
+    lockError.textContent = "";
+    try {
+        if (!payload) {
+            startExplorer(await loadPlain());
+        } else {
+            const key = await deriveKey(lockInput.value);
+            const content = await decrypt(key);
+            if ($("#lockRemember").checked) rememberKey(key); else forgetKey();
+            startExplorer(content);
+        }
+        lockInput.value = "";
+    } catch (err) {
+        fail(payload ? "Das Passwort stimmt nicht." : "Vorschau konnte nicht geladen werden.");
+    } finally {
+        lockButton.disabled = false;
+        lockButton.textContent = "Entsperren";
+    }
+});
+
+/* Beim Laden: gemerkten Schlüssel ausprobieren, sonst Passwort abfragen */
+(async () => {
+    $("#lockHint").hidden = !!payload;
+    const key = payload && storedKey();
+    if (key) {
+        try { startExplorer(await decrypt(key)); return; } catch (e) { forgetKey(); }
+    }
+    lockInput.focus();
+})();
+</script>
+</body>
+</html>
